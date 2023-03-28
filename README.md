@@ -113,6 +113,7 @@ Finally, all this data is loaded in parallel into CSV backup files ```DiscountTa
 
 
 ## How to Use:
+
 - 1- Clone the repository and navigate to the project directory.
 - 2- Compile the code using the following command:
 
@@ -127,3 +128,12 @@ Finally, all this data is loaded in parallel into CSV backup files ```DiscountTa
 - 6- The program will automatically detect the new files, apply the discount rules to the transaction data, and write the results to the ```discountstable``` table.
 - 7- The program will also log the events to the ```logstable``` table.
 - 8- And finally, a copy of the data will be loaded into ```DiscountTableBkup``` and ```LogsTableBkup``` CSV files in ```output_data``` directory.
+
+
+## Demo:
+
+
+https://user-images.githubusercontent.com/46838441/228169330-bf197776-65c7-450b-b914-a065163e7414.mp4
+
+
+
