@@ -1,0 +1,139 @@
+# Scala Discounts Real-Time Rule Engine
+
+
+A simple Scala Real-Time Rule Engine project that applies different discount rules to real-time transaction data and writes the results to a MySQL database. It also keeps tracking the logs data, and backups all data into CSV files.
+
+
+## Problem Statement:
+
+A huge retail store wants a rule engine that qualifies order transactions for discounts based on a set of qualifying rules.
+
+They need the system to be up and running for 24 hours. Raw transactions’ files will be pushed to the following machine (IP: X.X.X.X) on the following path (……/raw_data). They
+need the calculations to be done automatically once the file is pushed.
+
+## Project Details:
+
+Scala Real-Time Rule Engine processes the data CSV files once they are pushed to the directory that is being watched.
+It applies different discount rules on data based on some predefined calculation rules.
+Then, it writes the result into MySQL database tables.
+It also keeps tracking the log data and storing it in the MySQL database tables.
+Finally, it backup all data into CSV files for any unexpecting errors.
+
+### Discount Rules:
+
+The following discount rules are applied to the transactions data:
+
+- **Expiration Date Discount:** If the number of days remaining between the purchasing date and the expiration date is less than 30 days, a discount of (30 - (days between)) is applied. Otherwise, no discount is applied.
+
+    For example: 
+    - If 29 days remain ‐> 1% discount.
+    - If 28 days remain ‐> 2% discount.
+    - If 27 days remain ‐> 3% discount.
+    etc …
+
+
+- **Product Category Discount:** If the product category is "Cheese", a discount of 10% is applied. And If the product category is "Wine", a discount of 5% is applied. Otherwise, no discount is applied.
+
+
+- **Specific Day of Month Discount:** If the purchasing date is March 23, a special discount of 50% is applied. Otherwise, no discount is applied.
+
+
+- **Quantity Discount:** If the quantity of products purchased is more than 5 of the same product, a discount will be applied.
+
+    - If the quantity is between 6 and 9, a discount of 5% is applied. 
+    - If the quantity of products purchased is between 10 and 14, a discount of 7% is applied.
+    - If the quantity of products purchased is 15 or more, a discount of 10% is applied.
+    - Otherwise, no discount is applied.
+
+- **Purchasing Channel Discount:** Sales that are made through the "App" will have a special discount. A discount of the quantity rounded up to the nearest multiple of 5 is applied. Otherwise, no discount is applied.
+
+    For example: 
+    - If quantity: 1, 2, 3, 4, 5 ‐> discount 5%.
+    - If quantity 6, 7, 8, 9, 10 ‐> discount 10%.
+    - If quantity 11, 12, 13, 14, 15 ‐> discount 15%.
+    etc …
+
+- **Payment Method Discount:** If the payment method is "Visa", a discount of 5% is applied. Otherwise, no discount is applied.
+
+### Main Rules:
+
+- Transactions that didn't qualify for any discount will have a 0% discount. 
+- Transactions that qualified for more than one discount will get the top 2 and get their average.
+- After ingesting the raw data and calculating the discount the final price will be calculated and loaded into the output files.
+- The raw data needs to be removed from the source directory after successfully processing and writing it in the database.
+- It is required to log the engine’s events in a log file.
+
+## Project Technicality:
+
+- The project is written using Scala programming language, in a purely functional manner.
+- It follows the Functional Programming approach, by using pure, immutable, and predictable behavior functions and data structures. 
+- No loops and no Null values are used.
+- All functions are documented. 
+
+## How does It work?
+
+using the ```WatchService``` the source folder is tracking for any events. So, when new CSV files are added, it will read them into Scala data structures like ```Lists```, process it, then upload the result into Scala data structures.
+
+The data structures of the result will be loaded into MySQL database, in a table called ```discountstable``` that has the following columns:
+- ```Purchasing_Time```
+- ```Product```
+- ```Expiration_Date```
+- ```Quantity```
+- ```Price```
+- ```Payment_Method``` 
+- ```Discount``` 
+- ```Final_Price```
+
+Also, Logs data are tracked by storing the files' reading timestamp, the files' writing timestamp, and the processing timestamp. In addition to the number of transactions that had a discount from each file.
+All logs data is loaded in a MySQL database table called ```logstable``` that has the following columns:
+- ```TIMESTAMP``` 
+- ```LOGLEVEL``` 
+- ```MESSAGE```
+
+Finally, all this data is loaded in parallel into CSV backup files ```DiscountTableBkup``` for discount data and ```LogsTableBkup``` for logs data.
+
+## Project Main Files:
+
+- ```row_data``` is the source directory that is being watched.
+- ```output_data``` contains the backup CSV data files.
+- ```data``` contains sample data to be used on the Rule Engine.
+
+## Tools and Technologies:
+
+- Scala Programming Language.
+- MySQL database.
+- IntelliJ IDE.
+- WatchService.
+
+### Dependencies:
+- Scala 2.13.6
+- MySQL Connector/J 8.0.26
+
+        libraryDependencies += "mysql" % "mysql-connector-java" % "8.0.27"
+
+
+## How to Use:
+
+- 1- Clone the repository and navigate to the project directory.
+- 2- Compile the code using the following command:
+
+        scalac Rule_Engine.scala
+
+- 3- Run the code using the following command:
+
+        scala Rule_Engine
+
+- 4- Create the ```discountstable``` and ```logstable``` into the database, and make sure to change the connection information.
+- 5- Add CSV files containing transaction data to the ```row_data``` folder.
+- 6- The program will automatically detect the new files, apply the discount rules to the transaction data, and write the results to the ```discountstable``` table.
+- 7- The program will also log the events to the ```logstable``` table.
+- 8- And finally, a copy of the data will be loaded into ```DiscountTableBkup``` and ```LogsTableBkup``` CSV files in ```output_data``` directory.
+
+
+## Demo:
+
+
+https://user-images.githubusercontent.com/46838441/228169330-bf197776-65c7-450b-b914-a065163e7414.mp4
+
+
+
