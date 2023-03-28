@@ -95,7 +95,7 @@ object Rule_Engine extends App{
 
           // wait for a short time to make sure the file is ready to be read
           // This line is for handling the "The process cannot access the file because it is being used by another process" error
-          Thread.sleep(10)
+          Thread.sleep(50)
 
           // read the CSV file
           // make sure to close the file after reading so it won't cause any errors
@@ -457,7 +457,7 @@ object Rule_Engine extends App{
 
   def finalPrice(dataList: List[Any]): List[Any] = {
 
-    val Discount = dataList(4).toString.toDouble - (dataList(4).toString.toDouble * dataList(13).toString.toDouble)
+    val Discount = ((dataList(4).toString.toDouble)*(dataList(3).toString.toDouble)) - (((dataList(4).toString.toDouble)*(dataList(3).toString.toDouble)) * dataList(13).toString.toDouble)
 
 
     val outList = dataList :+ Discount
