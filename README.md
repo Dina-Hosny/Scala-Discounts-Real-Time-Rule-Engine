@@ -70,6 +70,17 @@ The following discount rules are applied to the transactions data:
 - No loops and no Null values are used.
 - All functions are documented. 
 
+### Project Main Functions:
+
+- expiration_fn: Calculates the discount to be applied to a product based on its expiration date.
+- Product_category: Determines the discount to be applied to a product based on its category.
+- exact_day: Determines the discount to be applied to a purchase made on a specific day.
+- quantityDiscount: Determines the discount to be applied to a purchase based on the quantity of items bought.
+- appDiscount: Determines the discount to be applied to a purchase based on the purchasing channel.
+- visaDiscount: Determines the discount to be applied to a purchase based on the payment method.
+- appliedDiscount: Determines the discount to be applied to a purchase based on the highest two discount values.
+- finalPrice: Determines the final price after applying the discount.
+
 ## How does It work?
 
 using the ```WatchService``` the source folder is tracking for any events. So, when new CSV files are added, it will read them into Scala data structures like ```Lists```, process it, then upload the result into Scala data structures.
