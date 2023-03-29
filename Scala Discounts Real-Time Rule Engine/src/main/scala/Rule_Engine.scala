@@ -111,6 +111,11 @@ object Rule_Engine extends App{
 
           // store the read timestamp to br used in logs data
           val readTime = Timestamp.valueOf(LocalDateTime.now())
+          val fileName = filePath.getFileName.toString
+
+          println(s"Start Time $readTime")
+          println(s"Listener Detected file: $fileName")
+          println(s"$fileName Successfully Read")
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -132,6 +137,8 @@ object Rule_Engine extends App{
 
             // store the processing timestamp for logs data
             val processTime = Timestamp.valueOf(LocalDateTime.now())
+            println(s"Producer Received file: $fileName")
+            println(s"$fileName Successfully Processed")
 
 
 
@@ -153,8 +160,12 @@ object Rule_Engine extends App{
             // store the write timestamp for logs data
             val writeTimestamp = Timestamp.valueOf(LocalDateTime.now())
 
+            println(s"File: $fileName Successfully wrote to the Database")
+            println(s"Finish Time $writeTimestamp")
+
             // get the processed file name for logs data
-            val fileName = filePath.getFileName.toString
+
+            //val fileName = filePath.getFileName.toString
 
             // get the number of total transactions on the processed file for logs data
             val numRows = lines.length
